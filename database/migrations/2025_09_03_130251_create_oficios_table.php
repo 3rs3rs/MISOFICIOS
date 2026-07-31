@@ -23,7 +23,7 @@ return new class extends Migration
             $table->foreignId('creador_id')
                 ->constrained('users');
             $table->string('asunto')->nullable();
-            $table->longText(                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   )->nullable();
+            $table->longText('cuerpo_html')->nullable();
             // ✅ NUEVO: indica si el oficio requiere contestación
             $table->boolean('requiere_respuesta')->default(false);
     

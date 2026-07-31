@@ -100,12 +100,12 @@ class OficioForm
                         ->label('Estado')
                         ->options([
                             'BORRADOR' => 'BORRADOR',
-                            'ENVIADO' => 'ENVIADO',
-                            'RECIBIDO' => 'RECIBIDO',
-                            'EN_RESPUESTA' => 'EN_RESPUESTA',
-                            'RESPONDIDO' => 'RESPONDIDO',
-                            'VENCIDO' => 'VENCIDO',
-                            'CERRADO' => 'CERRADO',
+                        //  'ENVIADO' => 'ENVIADO',
+                        //  'RECIBIDO' => 'RECIBIDO',
+                        //  'EN_RESPUESTA' => 'EN_RESPUESTA',
+                        //  'RESPONDIDO' => 'RESPONDIDO',
+                        //  'VENCIDO' => 'VENCIDO',
+                        //  'CERRADO' => 'CERRADO',
                         ])
                         ->default('BORRADOR')
                         ->required()
