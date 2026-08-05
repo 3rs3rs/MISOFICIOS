@@ -32,8 +32,8 @@ return new class extends Migration
             $table->date('fecha_limite')->nullable();
     
             $table->enum('estado', [
-                'BORRADOR','ENVIADO','RECIBIDO','EN_RESPUESTA','RESPONDIDO','VENCIDO','CERRADO'
-            ])->default('ENVIADO');
+                'BORRADOR','ENVIADO','RECIBIDO','LEIDO','EN_RESPUESTA','RESPONDIDO','VENCIDO','CERRADO'
+            ])->default('BORRADOR');
     
             $table->enum('prioridad', ['BAJA','NORMAL','ALTA','URGENTE'])->default('NORMAL');
     
@@ -42,7 +42,32 @@ return new class extends Migration
     
             // ✅ NUEVO: bandera para UI (aunque se puede inferir por media library)
             $table->boolean('tiene_adjuntos')->default(false);
-    
+            $table->timestamp('fecha_envio')->nullable();
+            $table->timestamp('fecha_recibido')->nullable();
+            $table->foreignId('recibido_por')
+                ->nullable()
+                ->constrained('users');
+            $table->timestamp('fecha_respuesta')->nullable();
+            $table->foreignId('respondido_por')
+                ->nullable()
+                ->constrained('users');
+            $table->enum('tipo',[
+                'INFORMATIVO',
+                'SOLICITUD',
+                'RESPUESTA',
+                'INVITACION',
+                'CIRCULAR',
+                'CONVOCATORIA',
+                'OTRO'
+                ])->default('INFORMATIVO');
+            $table->string('hash_documento')->nullable(); 
+            $table->timestamp('fecha_visto')->nullable();
+            $table->foreignId('cerrado_por')
+                ->nullable()
+                ->constrained('users');
+            $table->timestamp('fecha_cierre')->nullable();
+            $table->string('motivo_cierre')->nullable();
+
             $table->softDeletes();
             $table->timestamps();
     
