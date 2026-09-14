@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Departamento extends Model
 {
         protected $table = 'departamentos';
-        protected $fillable = ['id','mpio_id','nombre','director','clave','email_contacto','activo'];
+        protected $fillable = ['id','mpio_id','nombre','director','tel_celular','clave','email_contacto','activo'];
 
         public function mpio() {
             return $this->belongsTo(Mpio::class, 'mpio_id', 'id');     // cada departamento pertenece a un mpio 'mpio_id'

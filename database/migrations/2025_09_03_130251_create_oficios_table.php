@@ -38,7 +38,7 @@ return new class extends Migration
             $table->enum('prioridad', ['BAJA','NORMAL','ALTA','URGENTE'])->default('NORMAL');
     
             // 👇 Si ya usarás Spatie MediaLibrary, este campo puede quedar solo “legacy”
-            $table->string('pdf_path')->nullable();
+            // $table->string('pdf_path')->nullable();
     
             // ✅ NUEVO: bandera para UI (aunque se puede inferir por media library)
             $table->boolean('tiene_adjuntos')->default(false);

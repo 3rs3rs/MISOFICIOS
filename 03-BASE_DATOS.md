@@ -10,7 +10,9 @@ logotipo
 
 activo
 
-timestamps
+created_at
+
+updated_at
 
 ---
 
@@ -30,7 +32,9 @@ email_contacto
 
 activo
 
-timestamps
+created_at
+
+updated_at
 
 ---
 
@@ -54,7 +58,9 @@ activo
 
 remember_token
 
-timestamps
+created_at
+
+updated_at
 
 ---
 
@@ -84,17 +90,37 @@ estado
 
 prioridad
 
-pdf_path
-
 tiene_adjuntos
+
+fecha_envio
+
+fecha_recibido
+
+recibido_por
+
+fecha_respuesta
+
+tipo
+
+hash_documento 
+
+fecha_visto
+
+cerrado_por 
+
+fecha_cierre
+
+motivo_cierre
 
 deleted_at
 
-timestamps
+created_at
+
+updated_at
 
 ---
 
-Estados
+estados
 
 BORRADOR
 
@@ -114,7 +140,7 @@ CERRADO
 
 ---
 
-Prioridades
+prioridad
 
 BAJA
 
@@ -123,6 +149,24 @@ NORMAL
 ALTA
 
 URGENTE
+
+---
+
+tipo
+
+INFORMATIVO
+
+SOLICITUD
+
+RESPUESTA
+
+INVITACION
+
+CIRCULAR
+
+CONVOCATORIA
+
+OTRO
 
 ---
 
@@ -140,7 +184,9 @@ pdf_path
 
 fecha_respuesta
 
-timestamps
+created_at
+
+updated_at
 
 ---
 

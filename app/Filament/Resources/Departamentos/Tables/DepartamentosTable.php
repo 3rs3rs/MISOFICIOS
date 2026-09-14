@@ -24,6 +24,9 @@ class DepartamentosTable
                 TextColumn::make('director')
                     ->searchable(),
 
+                TextColumn::make('tel_celular')
+                    ->searchable(),
+
                 TextColumn::make('clave')
                     ->searchable(),
 

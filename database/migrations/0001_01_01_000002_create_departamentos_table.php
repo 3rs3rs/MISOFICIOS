@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('mpio_id')->constrained('mpios')->default('1');
             $table->string('nombre', 50)->nullable();
             $table->string('director', 50)->nullable();
+            $table->string('tel_celular', 15)->nullable();      
             $table->string('clave', 10)->unique()->nullable();
             $table->string('email_contacto')->nullable();
             $table->boolean('activo')->default(true);

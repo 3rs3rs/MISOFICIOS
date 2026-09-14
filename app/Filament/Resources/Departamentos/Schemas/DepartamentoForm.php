@@ -30,6 +30,11 @@ class DepartamentoForm
                     ->maxLength(50)
                     ->nullable(),
 
+                TextInput::make('tel_celular')
+                    ->label('Tel Celular WhatsApp')
+                    ->maxLength(15)
+                    ->nullable(),
+
                 TextInput::make('clave')
                     ->label('Clave')
                     ->maxLength(10)

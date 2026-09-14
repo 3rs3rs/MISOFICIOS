@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'meta_whatsapp' => [
+        'access_token' => env('WHATSAPP_META_ACCESS_TOKEN'),
+        'phone_number_id' => env('WHATSAPP_META_PHONE_NUMBER_ID'),
+        'graph_version' => env('WHATSAPP_META_GRAPH_VERSION'),
+        'template' => env('WHATSAPP_META_TEMPLATE'),
+        'template_language' => env('WHATSAPP_META_TEMPLATE_LANGUAGE', 'es_MX'),
+    ],
+
 ];

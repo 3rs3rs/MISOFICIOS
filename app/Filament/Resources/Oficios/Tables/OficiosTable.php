@@ -8,11 +8,16 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Support\Icons\Heroicon;
+use App\Mail\OficioEnviado;
+use App\Models\Oficio;
+use App\Services\WhatsAppService;
 use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Mail;
 
 class OficiosTable
 {
@@ -37,7 +42,49 @@ class OficiosTable
             
             TextColumn::make('estado')
                 ->badge()
-                ->sortable(),
+                ->sortable()
+                ->action(
+                    Action::make('enviar_a_destinatario')
+                        ->label('Enviar a destinatario')
+                        ->icon(Heroicon::OutlinedPaperAirplane)
+                        ->requiresConfirmation()
+                        ->modalHeading('Enviar oficio')
+                        ->modalDescription(fn (Oficio $record) => 'Se enviará el oficio '
+                            . $record->numero_unico
+                            . ' al correo de '
+                            . ($record->destinatario?->nombre ?? 'destinatario')
+                            . ($record->destinatario?->email_contacto ? ' (' . $record->destinatario->email_contacto . ')' : '')
+                            . '.')
+                        ->visible(fn (Oficio $record) => $record->hasMedia('pdfs') && $record->destinatario?->email_contacto)
+                        ->action(function (Oficio $record) {
+                            Mail::to($record->destinatario->email_contacto)
+                                ->send(new OficioEnviado($record));
+
+                            $record->update(['estado' => 'enviado']);
+
+                            $phone = $record->destinatario?->tel_celular;
+                            $waLink = $phone
+                                ? app(WhatsAppService::class)->waLink($phone, 'Le informamos que ha recibido un Oficio de la Contraloría Municipal.'
+                                    . ' Número: ' . $record->numero_unico
+                                    . '. Asunto: ' . $record->asunto
+                                    . '. Revise su correo para consultar el PDF adjunto.')
+                                : '';
+
+                            Notification::make()
+                                ->title('Oficio enviado')
+                                ->body('El oficio ' . $record->numero_unico . ' fue enviado a ' . $record->destinatario->nombre . '.')
+                                ->success()
+                                ->actions([
+                                    Action::make('aviso_whatsapp')
+                                        ->label('Avisar por WhatsApp')
+                                        ->icon(Heroicon::OutlinedChatBubbleLeftRight)
+                                        ->url($waLink)
+                                        ->openUrlInNewTab()
+                                        ->visible($waLink !== ''),
+                                ])
+                                ->send();
+                        }),
+                ),
             
             TextColumn::make('prioridad')
                 ->badge()
@@ -104,7 +151,19 @@ class OficiosTable
                 Action::make('ver_pdf')
                     ->label('Ver PDF')
                     ->icon(Heroicon::OutlinedArrowTopRightOnSquare)
-                    ->url(fn ($record) => $record->hasMedia('pdfs') ? $record->getFirstMediaUrl('pdfs') : null)
+                    ->url(function (Oficio $record): ?string {
+                        $media = $record->getFirstMedia('pdfs');
+
+                        if (! $media) {
+                            return null;
+                        }
+
+                        try {
+                            return $media->getTemporaryUrl(now()->addMinutes(30)->endOfHour());
+                        } catch (\Throwable) {
+                            return $media->getUrl();
+                        }
+                    })
                     ->openUrlInNewTab()
                     ->visible(fn ($record) => $record->hasMedia('pdfs'))
                     ->tooltip('Abrir el PDF del oficio'),

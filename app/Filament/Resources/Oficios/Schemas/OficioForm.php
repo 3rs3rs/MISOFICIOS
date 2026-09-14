@@ -37,7 +37,7 @@ class OficioForm
                         ->disabled()
                         ->dehydrated()
                         ->required()
-                        ->columnSpan(4),
+                        ->columnSpan(6),
 
                     // Remitente = departamento del usuario logueado
                     Select::make('remitente_id')
@@ -47,7 +47,7 @@ class OficioForm
                         ->disabled()
                         ->dehydrated()
                         ->required()
-                        ->columnSpan(4),
+                        ->columnSpan(6),
 
                     // Destinatario (mismo mpio y activo)
                     Select::make('destinatario_id')
@@ -66,7 +66,7 @@ class OficioForm
                         ->searchable()
                         ->preload()
                         ->required()
-                        ->columnSpan(4),
+                        ->columnSpan(6),
 
                     // Número único autogenerado
                     TextInput::make('numero_unico')
@@ -81,7 +81,7 @@ class OficioForm
                                 ? Oficio::generarNumeroParaDepartamento($remitenteId)
                                 : null;
                         })
-                        ->columnSpan(4),
+                        ->columnSpan(6),
 
                     Select::make('prioridad')
                         ->label('Prioridad')
@@ -94,7 +94,7 @@ class OficioForm
                         ->default('NORMAL')
                         ->required()
                         ->native(false)
-                        ->columnSpan(4),
+                        ->columnSpan(6),
 
                     Select::make('estado')
                         ->label('Estado')
@@ -110,7 +110,24 @@ class OficioForm
                         ->default('BORRADOR')
                         ->required()
                         ->native(false)
-                        ->columnSpan(4),
+                        ->columnSpan(6),
+
+                    Select::make('tipo')
+                        ->label('Tipo de Oficio')
+                        ->options([
+                            'INFORMATIVO' => 'INFORMATIVO',
+                            'SOLICITUD' => 'SOLICITUD',
+                            'AUTORIZACION' => 'AUTORIZACION',
+                            'RESPUESTA' => 'RESPUESTA',
+                            'INVITACION' => 'INVITACION',
+                            'CIRCULAR' => 'CIRCULAR', 
+                            'CONVOCATORIA' => 'CONVOCATORIA',
+                            'OTRO' => 'OTRO',
+                        ])
+                        ->default('INFORMATIVO')
+                        ->required()
+                        ->native(false)
+                        ->columnSpan(6),
 
                     TextInput::make('asunto')
                         ->label('Asunto')
@@ -221,6 +238,7 @@ class OficioForm
                         ->openable()
                         ->acceptedFileTypes(['application/pdf'])
                         ->maxSize(10240) // 10MB por archivo
+                        ->preserveFilenames()
                         ->helperText('Puedes cargar tantos PDFs como sean necesarios (máx 10MB c/u).')
                         ->visible(fn (\Filament\Schemas\Components\Utilities\Get $get): bool => (bool) $get('tiene_adjuntos'))
                         ->required(fn (\Filament\Schemas\Components\Utilities\Get $get): bool => (bool) $get('tiene_adjuntos'))
